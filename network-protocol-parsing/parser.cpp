@@ -67,9 +67,9 @@ Parser::parse(uint8_t* data, size_t len, size_t& bytesRead, Packet& packet)
 				packet.size = ntohl(packet.size);
 				_step++;
 
+				packet.data.clear();
 				if (packet.size > 0)
 				{
-					packet.data.clear();
 					packet.data.reserve(packet.size);
 				}
 				else

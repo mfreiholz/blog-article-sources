@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	Packet pkt1;
 	pkt1.header = 0xAF;
 	pkt1.flags = 0x00;
-	pkt1.sequence = 0x0001;
+	pkt1.type = 0x0001;
 	pkt1.size = 3;
 	pkt1.data = { 0x11, 0x22, 0x33 };
 	pkt1.checksum = 0xFF;
@@ -29,11 +29,16 @@ int main(int argc, char** argv)
 	Packet pkt2;
 	pkt2.header = 0xAF;
 	pkt2.flags = 0x80;
-	pkt2.sequence = 0x0002;
+	pkt2.type = 0x0002;
 	pkt2.size = 1;
 	pkt2.data = { 0x88 };
 	pkt2.checksum = 0xEE;
 	pkt2.serialize(buf);
+
+	// Add some random invalid bytes to network buffer.
+	buf.push_back(0x11);
+	buf.push_back(0x22);
+	buf.push_back(0x33);
 
 	// SERVER SIDE
 	// Parse packets from network/buffer `buf`.
@@ -50,8 +55,8 @@ int main(int argc, char** argv)
 		{
 			// At this point the `packet` is complete.
 			// todo: handlePacket(packet);
-			printf("INFO new packet! sequence=%d; size=%d\n",
-				   packet.sequence, packet.size);
+			printf("INFO new packet! type=%d; size=%d\n",
+				   packet.type, packet.size);
 		}
 		if (bytesRead < plen)
 		{

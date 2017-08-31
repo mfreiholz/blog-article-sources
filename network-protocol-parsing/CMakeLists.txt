@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(blognetprotpar)
+project(postnetworkprotocolparsing)
 file(GLOB headers *.h)
 file(GLOB sources *.cpp)
 add_executable(
