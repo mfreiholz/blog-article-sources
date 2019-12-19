@@ -46,26 +46,18 @@ int main(int argc, char** argv)
 	// Parsing.
 	Parser parser;
 	Packet packet;
-	auto p = buf.data();
-	auto plen = buf.size();
-	for (;;)
+	uint8_t* p = buf.data();
+	size_t plen = buf.size();
+	while (plen > 0)
 	{
 		size_t bytesRead = 0;
 		if (parser.parse(p, plen, bytesRead, packet))
 		{
 			// At this point the `packet` is complete.
-			// todo: handlePacket(packet);
-			printf("INFO new packet! type=%d; size=%d\n",
-				   packet.type, packet.size);
+			printf("INFO new packet! type=%d; size=%d\n", packet.type, packet.size);
 		}
-		if (bytesRead < plen)
-		{
-			p += bytesRead;
-			plen -= bytesRead;
-			continue;
-		}
-		break;
+		p += bytesRead;
+		plen -= bytesRead;
 	}
-
 	return 0;
 }
